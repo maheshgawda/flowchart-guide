@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flowchart — A Field Guide</title>
+<meta name="description" content="A visual reference to flowcharts: symbols, history, and standards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0F1E38;
+    --navy:#16294B;
+    --navy-panel:#1C315A;
+    --line:#5A7CA8;
+    --line-bright:#9FC1E8;
+    --paper:#EDF2FA;
+    --paper-dim:#B9C8DE;
+    --amber:#E8A33D;
+    --amber-dim:#8A6A38;
+    --font-head:'IBM Plex Sans Condensed', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--navy-deep);
+    color:var(--paper);
+    font-family:var(--font-body);
+    line-height:1.55;
+    background-image:
+      linear-gradient(var(--navy) 1px, transparent 1px),
+      linear-gradient(90deg, var(--navy) 1px, transparent 1px);
+    background-size:32px 32px;
+    background-position:-1px -1px;
+  }
+  a{color:var(--line-bright);}
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+  .rule{border:none;border-top:1px solid var(--line);opacity:.5;margin:0;}
+
+  /* ---- Title block header (engineering drawing style) ---- */
+  header{padding:56px 0 0;}
+  .titleblock{
+    border:2px solid var(--line-bright);
+    background:rgba(28,49,90,0.55);
+    padding:0;
+  }
+  .titleblock-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:28px 32px 20px;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .titleblock h1{
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:clamp(2.4rem,6vw,4.2rem);
+    letter-spacing:0.5px;
+    margin:0;
+    line-height:0.95;
+  }
+  .titleblock .sub{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    color:var(--paper-dim);
+    max-width:30ch;
+    text-align:right;
+    padding-top:8px;
+  }
+  .meta-strip{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--line);
+  }
+  .meta-strip div{
+    padding:10px 14px;
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--paper-dim);
+    border-right:1px solid var(--line);
+  }
+  .meta-strip div:last-child{border-right:none;}
+  .meta-strip span{display:block;color:var(--line-bright);font-size:0.9rem;margin-top:2px;}
+
+  /* ---- sections ---- */
+  main{padding:64px 0 40px;}
+  section{margin-bottom:76px;}
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--amber);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .tag::before{content:"";width:22px;height:1px;background:var(--amber);display:inline-block;}
+  h2{
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:clamp(1.5rem,3.4vw,2.1rem);
+    margin:0 0 18px;
+    color:var(--paper);
+  }
+  p{color:var(--paper-dim);max-width:68ch;}
+  p.lead{color:var(--paper);font-size:1.08rem;max-width:62ch;}
+
+  /* intro two-col */
+  .intro-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:start;}
+  @media (max-width:760px){.intro-grid{grid-template-columns:1fr;}}
+
+  /* sample diagram */
+  .diagram-frame{
+    border:1px solid var(--line);
+    background:rgba(15,30,56,0.4);
+    padding:18px;
+  }
+  .diagram-frame svg{width:100%;height:auto;display:block;}
+  figcaption{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--paper-dim);
+    margin-top:10px;
+    text-align:center;
+  }
+
+  /* symbol legend */
+  .legend{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media (max-width:700px){.legend{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:460px){.legend{grid-template-columns:1fr;}}
+  .legend-item{background:var(--navy-deep);padding:22px 18px;display:flex;flex-direction:column;gap:10px;}
+  .legend-item svg{width:64px;height:44px;}
+  .legend-item h3{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    font-weight:600;
+    color:var(--line-bright);
+    margin:0;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+  }
+  .legend-item p{font-size:0.85rem;margin:0;color:var(--paper-dim);}
+
+  /* timeline */
+  .timeline{position:relative;padding-left:26px;border-left:1px solid var(--line);}
+  .tl-item{position:relative;padding-bottom:34px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:"";
+    position:absolute;left:-31px;top:4px;
+    width:9px;height:9px;
+    background:var(--amber);
+    border-radius:50%;
+  }
+  .tl-year{font-family:var(--font-mono);color:var(--amber);font-size:0.85rem;display:block;margin-bottom:4px;}
+  .tl-item h4{margin:0 0 6px;font-family:var(--font-head);font-weight:700;font-size:1.1rem;}
+  .tl-item p{margin:0;font-size:0.92rem;}
+
+  /* types grid */
+  .types{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media (max-width:640px){.types{grid-template-columns:1fr;}}
+  .type-item{background:var(--navy-deep);padding:24px;}
+  .type-item .num{font-family:var(--font-mono);color:var(--amber-dim);font-size:0.78rem;}
+  .type-item h4{margin:6px 0 8px;font-family:var(--font-head);font-size:1.15rem;}
+  .type-item p{margin:0;font-size:0.9rem;}
+
+  /* standards note */
+  .note{
+    border-left:2px solid var(--amber);
+    padding:4px 0 4px 20px;
+    margin-top:18px;
+  }
+  .note p{color:var(--paper);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0 50px;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:var(--paper-dim);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  footer a{color:var(--paper-dim);}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="titleblock">
+    <div class="titleblock-top">
+      <h1>Flowchart</h1>
+      <div class="sub">A diagrammatic representation of a workflow, process, or algorithm — shown as boxes, connected by arrows, indicating order of operation.</div>
+    </div>
+    <div class="meta-strip">
+      <div>Standard<span>ISO 5807:1985</span></div>
+      <div>Origin<span>Gilbreth, 1921</span></div>
+      <div>Flow<span>Top → Bottom</span></div>
+      <div>Field<span>Process design</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="intro">
+    <div class="intro-grid">
+      <div>
+        <p class="lead">A flowchart shows the steps of a process as boxes of various kinds, connected by arrows that mark the order in which they happen. It's a solution model for a problem, rendered so the eye can follow it.</p>
+        <p>Flowcharts are used for analyzing, designing, documenting, and managing processes or programs across fields — from software logic to factory-floor procedures. Two of the biggest benefits: flaws and bottlenecks become visible once a process is laid out this way, in a way dense prose rarely reveals.</p>
+        <p>A flowchart is <strong style="color:var(--paper);font-weight:600;">cross-functional</strong> when it's split into lanes — vertical or horizontal — each representing a different team or role. A symbol placed in a lane belongs to that team's responsibility, so the chart doubles as an accountability map.</p>
+      </div>
+      <figure class="diagram-frame">
+        <svg viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--line-bright)"/>
+            </marker>
+          </defs>
+          <g fill="none" stroke="var(--line-bright)" stroke-width="1.5">
+            <rect x="80" y="10" width="100" height="34" rx="17" fill="var(--navy-panel)"/>
+            <line x1="130" y1="44" x2="130" y2="64" marker-end="url(#arrow)"/>
+            <rect x="60" y="64" width="140" height="40" fill="var(--navy-panel)"/>
+            <line x1="130" y1="104" x2="130" y2="124" marker-end="url(#arrow)"/>
+            <polygon points="130,124 190,164 130,204 70,164" fill="var(--navy-panel)"/>
+            <line x1="190" y1="164" x2="230" y2="164" marker-end="url(#arrow)"/>
+            <line x1="130" y1="204" x2="130" y2="224" marker-end="url(#arrow)"/>
+            <rect x="60" y="224" width="140" height="40" fill="var(--navy-panel)"/>
+            <line x1="130" y1="264" x2="130" y2="284" marker-end="url(#arrow)"/>
+            <rect x="80" y="284" width="100" height="34" rx="17" fill="var(--navy-panel)"/>
+            <path d="M230,164 L230,44 L184,44" marker-end="url(#arrow)"/>
+          </g>
+          <g fill="var(--paper)" font-family="IBM Plex Mono, monospace" font-size="10.5" text-anchor="middle">
+            <text x="130" y="31">start</text>
+            <text x="130" y="88">read input</text>
+            <text x="130" y="168">valid?</text>
+            <text x="130" y="248">process</text>
+            <text x="130" y="305">end</text>
+            <text x="230" y="30" text-anchor="middle" fill="var(--amber)">no</text>
+            <text x="150" y="220" fill="var(--amber)">yes</text>
+          </g>
+        </svg>
+        <figcaption>fig. 1 — minimal decision loop, ANSI/ISO symbol set</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="symbols">
+    <div class="tag">01 — symbol set</div>
+    <h2>Reading the shapes</h2>
+    <p style="margin-bottom:28px;">The ANSI/ISO 5807 standard fixes a small vocabulary of shapes. Each one carries a specific meaning — the geometry is the grammar of the diagram.</p>
+    <div class="legend">
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><rect x="20" y="15" width="60" height="30" rx="15" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Terminal</h3>
+        <p>Marks the start or end of a process. A stadium or rounded rectangle, usually labelled "start" or "end."</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><rect x="18" y="15" width="64" height="30" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Process</h3>
+        <p>A single operation that changes the value, form, or location of data. Drawn as a plain rectangle.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><polygon points="50,10 88,30 50,50 12,30" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Decision</h3>
+        <p>A conditional branch — commonly yes/no or true/false — shown as a diamond with two or more exits.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><polygon points="30,15 90,15 78,45 18,45" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Input / Output</h3>
+        <p>Data becoming available for processing, or processed data being released. Drawn as a rhomboid.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><rect x="20" y="15" width="60" height="30" fill="none" stroke="#9FC1E8" stroke-width="2"/><line x1="26" y1="15" x2="26" y2="45" stroke="#9FC1E8" stroke-width="2"/><line x1="74" y1="15" x2="74" y2="45" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Predefined process</h3>
+        <p>A named sub-process defined elsewhere — a rectangle with double-struck vertical edges.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><circle cx="50" cy="30" r="18" fill="none" stroke="#9FC1E8" stroke-width="2"/><text x="50" y="35" font-family="IBM Plex Mono" font-size="14" fill="#9FC1E8" text-anchor="middle">A</text></svg>
+        <h3>On-page connector</h3>
+        <p>A labelled circle that replaces a long, crossing line with a jump to another point on the same page.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><polygon points="16,15 72,15 88,30 72,45 16,45" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Off-page connector</h3>
+        <p>Same idea as above, but the target sits on a different page — drawn as a home-plate pentagon.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><path d="M50 12 A18 18 0 1 1 49.9 12" fill="none" stroke="#9FC1E8" stroke-width="2" transform="scale(1,0.55) translate(0,25)"/><rect x="32" y="15" width="36" height="30" fill="none" stroke="none"/><ellipse cx="50" cy="15" rx="18" ry="6" fill="none" stroke="#9FC1E8" stroke-width="2"/><path d="M32,15 L32,45 A18,6 0 0 0 68,45 L68,15" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Data file</h3>
+        <p>A cylinder standing in for a disk drive or stored dataset — a database or file read/write.</p>
+      </div>
+      <div class="legend-item">
+        <svg viewBox="0 0 100 60"><polygon points="20,15 80,15 80,38 50,45 20,38" fill="none" stroke="#9FC1E8" stroke-width="2"/></svg>
+        <h3>Document</h3>
+        <p>A single printed or on-screen document — a rectangle with a wavy base edge.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="history">
+    <div class="tag">02 — origin</div>
+    <h2>From factory floor to source code</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-year">1921</span>
+        <h4>The flow process chart</h4>
+        <p>Frank and Lillian Gilbreth introduce the first structured method for documenting process flow, presented to the American Society of Mechanical Engineers as "Process Charts: First Steps in Finding the One Best Way to do Work."</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">1930s</span>
+        <h4>Work simplification</h4>
+        <p>Industrial engineer Allan H. Mogensen trains businesspeople in these tools at his Work Simplification Conferences in Lake Placid, New York — carrying the chart out of engineering and into general business use.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">1947</span>
+        <h4>ASME standardizes the symbols</h4>
+        <p>ASME adopts a symbol set derived from Gilbreth's original work as the "ASME Standard: Operation and Flow Process Charts" — the same year Goldstine and von Neumann are independently developing flowcharts to plan computer programs.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">1960s–1970</span>
+        <h4>ANSI, then ISO</h4>
+        <p>The American National Standards Institute sets formal standards for flowchart symbols; ISO adopts the ANSI symbol set in 1970, unifying notation internationally.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">1985</span>
+        <h4>ISO 5807</h4>
+        <p>The current standard is published, covering documentation symbols and conventions for data, program, and system flowcharts. It was last reviewed in 2019.</p>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">1970s onward</span>
+        <h4>Decline, then persistence</h4>
+        <p>As interactive terminals and third-generation programming languages made source code a faster way to express algorithms, flowchart use for programming declined — but the chart persisted for process design, and UML activity diagrams and Drakon-charts carry its logic forward.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="types">
+    <div class="tag">03 — classification</div>
+    <h2>Four kinds of control</h2>
+    <p style="margin-bottom:28px;">Sterneckert (2003) grouped flowcharts by what they control, rather than by what flows through them — a distinction other authors have sliced differently, but this framing is the most widely cited.</p>
+    <div class="types">
+      <div class="type-item">
+        <span class="num">01</span>
+        <h4>Document flowchart</h4>
+        <p>Shows the controls governing a document's path through a system — who touches it, in what order.</p>
+      </div>
+      <div class="type-item">
+        <span class="num">02</span>
+        <h4>Data flowchart</h4>
+        <p>Shows the controls over how data moves through a system, independent of the physical documents carrying it.</p>
+      </div>
+      <div class="type-item">
+        <span class="num">03</span>
+        <h4>System flowchart</h4>
+        <p>Shows controls at the physical or resource level — hardware, storage, and the machinery a process runs on.</p>
+      </div>
+      <div class="type-item">
+        <span class="num">04</span>
+        <h4>Program flowchart</h4>
+        <p>Shows the control logic inside a single program running within a larger system.</p>
+      </div>
+    </div>
+    <div class="note">
+      <p>Other authors count differently: Veronis (1978) named system, general, and detailed flowcharts; Fryman (2001) added decision, logic, and product flowcharts to the list. The vocabulary varies by author, but the underlying idea — a flow graph abstracting away node types and content — stays the same.</p>
+    </div>
+  </section>
+
+  <section id="notation">
+    <div class="tag">04 — beyond the basics</div>
+    <h2>Parallel work, and what the chart doesn't capture</h2>
+    <p>For processes that fork into independent branches, a horizontal bar marks the split and rejoin: at a <strong style="color:var(--paper);font-weight:600;">fork</strong>, one incoming path becomes two or more outgoing ones; at a <strong style="color:var(--paper);font-weight:600;">join</strong>, every incoming path must finish before the single outgoing path continues.</p>
+    <p>A plain drawing program can produce a flowchart, but it has no underlying data model — nothing to share with a database or a project-management tool. Purpose-built software can generate flowcharts directly from source code or from a flowchart description language instead of freehand drawing.</p>
+    <p>Flowcharts also have a known limit: they don't suit recursive programming well, which is part of why source code and UML activity diagrams overtook them for describing algorithms, even as the chart remained the clearer tool for laying out a business process end to end.</p>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <span>Source: Wikipedia, "Flowchart" (en.wikipedia.org/wiki/Flowchart), CC BY-SA 4.0</span>
+  <span>Built as a static page — drop into any GitHub Pages repo</span>
+</footer>
+
+</body>
+</html>
